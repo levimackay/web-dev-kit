@@ -4,12 +4,19 @@ My setup for building websites with Claude Code, as one skill. It installs the w
 
 ## Install
 
-```bash
-git clone https://github.com/levimackay/web-dev-kit ~/.claude/skills/web-dev-kit
-bash ~/.claude/skills/web-dev-kit/install.sh
+In Claude Code:
+
+```
+/plugin install web-dev-kit --marketplace levimackay/web-dev-kit
 ```
 
-It lists everything it is about to install and asks before installing. Restart Claude Code afterwards. You can also clone it and ask Claude to "set up the web dev kit".
+Then ask Claude to "set up the web dev kit". It shows the plugins and skills it is about to add and installs them once you say yes. Restart Claude Code afterwards.
+
+Without the plugin system, download `web-dev-kit-<version>.zip` from [Releases](https://github.com/levimackay/web-dev-kit/releases), unzip it into `~/.claude/skills/`, and run:
+
+```bash
+bash ~/.claude/skills/web-dev-kit/install.sh
+```
 
 It needs `claude`, Node 20 or newer and `git`. Rerunning it is safe.
 
@@ -23,7 +30,7 @@ Two steps stay manual. The Anthropic `design` plugin comes from claude.ai under 
 
 ## What is in it
 
-`rules/` holds what the installed skills do not cover, learned from real builds:
+`skills/web-dev-kit/rules/` holds what the installed skills do not cover, learned from real builds:
 
 | File | Covers |
 | --- | --- |
@@ -69,7 +76,7 @@ Each tool installs from its own repo and keeps its own license. The plugin marke
 ## Updating the pins
 
 ```bash
-bash scripts/pin.sh
+bash skills/web-dev-kit/scripts/pin.sh
 ```
 
 Moves every commit pin to the current head of its repo so the changes can be reviewed in one diff.
