@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Site Maker" />
+    <title>Bad page</title>
+    <style>
+      body { font-family: Inter, sans-serif; margin: 0; overflow-x: hidden; }
+      .hero h1 { opacity: 0; }
+      .small { font-size: 12px; }
+      .wide { width: 2000px; height: 10px; background: #222; }
+      .badge { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+    </style>
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <header class="hero"><h1>Bad page</h1></header>
+    <main>
+      <canvas id="scene" width="400" height="200"></canvas>
+      <p class="small">This paragraph is set far too small to read comfortably on a phone.</p>
+      <p>We ship fast — and we ship well; trust us!</p>
+      <p id="out"></p>
+      <div class="wide"></div>
+      <img src="missing.png" />
+      <a href="#nowhere">Jump</a>
+      <a href="/gone.html">Gone</a>
+      <div class="badge">Badge</div>
+    </main>
+    <script>
+      // Step 1: Initialize the hero
+      document.querySelector(".hero h1").style.opacity = 1;
+      document.getElementById("out").textContent = String([document.createElement("div")]);
+      console.error("boom");
+      const gl = document.getElementById("scene").getContext("webgl");
+      gl.clearColor(0.2, 0.4, 0.8, 1);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+    </script>
+  </body>
+</html>
