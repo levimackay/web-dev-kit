@@ -1,6 +1,7 @@
 import { pathToFileURL } from "node:url";
 import * as fontkit from "fontkit";
 import { launch } from "./page.mjs";
+import { clean, untrusted } from "./clean.mjs";
 
 const elements = ["h1", "h2", "h3", "p", "a", "button"];
 
@@ -19,7 +20,7 @@ function describeFile(buffer) {
       foundry: nameRecord(font, "manufacturer"),
       designer: nameRecord(font, "designer"),
       vendorUrl: nameRecord(font, "vendorURL"),
-      license: nameRecord(font, "license").replace(/\s+/g, " ").slice(0, 160),
+      license: nameRecord(font, "license"),
       licenseUrl: nameRecord(font, "licenseURL"),
     };
   } catch {
@@ -31,15 +32,15 @@ export async function inspectFonts(url) {
   const browser = await launch();
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    const files = new Map();
-    page.on("response", async (response) => {
+    const pending = [];
+    page.on("response", (response) => {
       const type = response.headers()["content-type"] ?? "";
       if (response.request().resourceType() !== "font" && !/font|woff/.test(type)) return;
-      const body = await response.body().catch(() => null);
-      if (body) files.set(response.url(), body);
+      pending.push(response.body().then((body) => [response.url(), body], () => null));
     });
     await page.goto(url, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    const files = new Map((await Promise.all(pending)).filter(Boolean));
 
     const stacks = await page.evaluate(
       (selectors) =>
@@ -69,18 +70,18 @@ export async function inspectFonts(url) {
 }
 
 function print(url, { stacks, files }) {
-  console.log(`fonts on ${url}\n`);
+  console.log(`fonts on ${clean(url, 300)}\n${untrusted}\n`);
   for (const { element, stack, rendered } of stacks) {
-    console.log(`${element.padEnd(7)} renders ${rendered || "unknown"}  (css: ${stack})`);
+    console.log(`${element.padEnd(7)} renders ${clean(rendered, 80) || "unknown"}  (css: ${clean(stack, 120)})`);
   }
   console.log(files.length ? "\nfont files" : "\nno web font files were downloaded");
   for (const f of files) {
-    console.log(`\n${f.family ?? "unreadable"}  ${new URL(f.file).pathname.split("/").pop()}`);
-    if (f.foundry) console.log(`  foundry   ${f.foundry}`);
-    if (f.designer) console.log(`  designer  ${f.designer}`);
-    if (f.vendorUrl) console.log(`  vendor    ${f.vendorUrl}`);
-    console.log(`  license   ${f.license || "not stated in the file, check the foundry before using it"}`);
-    if (f.licenseUrl) console.log(`            ${f.licenseUrl}`);
+    console.log(`\n${clean(f.family, 80) || "unreadable"}  ${clean(new URL(f.file).pathname.split("/").pop(), 80)}`);
+    if (f.foundry) console.log(`  foundry   ${clean(f.foundry, 80)}`);
+    if (f.designer) console.log(`  designer  ${clean(f.designer, 120)}`);
+    if (f.vendorUrl) console.log(`  vendor    ${clean(f.vendorUrl, 120)}`);
+    console.log(`  license   ${clean(f.license) || "not stated in the file, check the foundry before using it"}`);
+    if (f.licenseUrl) console.log(`            ${clean(f.licenseUrl, 160)}`);
   }
 }
 

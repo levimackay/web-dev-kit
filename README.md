@@ -63,7 +63,7 @@ Two steps stay manual: the Anthropic `design` plugin comes from claude.ai under 
 
 ## The page check
 
-`check.sh` opens a running page or a built folder at 1440, 768 and 390 wide, scrolls all of it, loads it again with JavaScript off, with reduced motion and with WebGL off, then reports what a reviewer would catch. It exits 1 when something has to be fixed.
+`check.sh` opens a running page or a built folder at 1440, 768 and 390 wide, scrolls all of it, loads it again with JavaScript off and with reduced motion, and with WebGL off when the first screen has a canvas, then reports what a reviewer would catch. It exits 1 when something has to be fixed.
 
 ```bash
 bash check.sh http://localhost:5173/ --src .
@@ -185,7 +185,7 @@ The full loop is in [`workflow.md`](skills/web-dev-kit/rules/workflow.md).
 
 The rules also point to tools that run with `npx` when needed, pinned to a version: [dembrandt](https://github.com/dembrandt/dembrandt), [Google's design.md](https://github.com/google-labs-code/design.md), [fontaine](https://github.com/unjs/fontaine), [Capsize](https://github.com/seek-oss/capsize), [subfont](https://github.com/Munter/subfont) and [Unlighthouse](https://github.com/harlan-zw/unlighthouse). And to reference collections: [design-bites](https://github.com/educlopez/design-bites), [awesome-design-md](https://github.com/VoltAgent/awesome-design-md) and [official-design-md](https://github.com/VoltAgent/official-design-md).
 
-Each tool installs from its own repo and keeps its own licence. Impeccable and brag are pinned to release tags. The other plugin marketplaces publish no tags, so they follow their latest version.
+Each tool installs from its own repo and keeps its own licence. Pins fix the skill files, not packages a skill fetches when it runs: modern-web-guidance calls `npx modern-web-guidance@latest`. Impeccable and brag are pinned to release tags. The other plugin marketplaces publish no tags, so they follow their latest version.
 
 ## Updating the pins
 
