@@ -48,6 +48,22 @@ gsap.ticker.lagSmoothing(0);
 - At the end of the pin the whole last panel, text included, is inside the viewport.
 - Size panel images so image plus text fit below the rail with room to spare (`height: min(54vh, 500px)`).
 
+## Libraries
+
+| Need | Use |
+| --- | --- |
+| Scroll scenes, pins, timelines | GSAP with ScrollTrigger (free, including the former bonus plugins) |
+| Smooth scroll | Lenis |
+| React springs, layout and gesture animation | Motion (`motiondivision/motion`) |
+| Light timelines and SVG | Anime.js v4 |
+| WebGL | three.js with `pmndrs/drei` and `pmndrs/postprocessing` |
+| Page transitions | The View Transitions API (`bramus/view-transitions-demos`), Swup for multi page sites |
+| Scroll linked CSS without JS | Scroll driven animations (scroll-driven-animations.style) |
+
+Study effect source in the Codrops repos (github.com/codrops). Recent ones are MIT. Check each repo's licence before reusing code.
+
+Skip Theatre.js, Barba and Splitting (no releases since 2024) and LYGIA shaders (Prosperity licence, noncommercial plus a 30 day trial, so not for client sites).
+
 ## WebGL
 
 Every WebGL scene has a fallback that paints without WebGL: a 2D canvas or a still image, chosen before three.js downloads. `check.sh` loads the page with WebGL off and fails when a canvas is blank.

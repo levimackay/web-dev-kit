@@ -16,6 +16,8 @@ Three or more of these on one page and it reads as machine made, however defensi
 
 ## Choosing type and colour
 
+`type.md` has the full process for fonts, with sources and licence checks. `color-expert` and `better-colors` cover colour science.
+
 - Never work from a short list of allowed fonts. A list of tasteful fonts is exactly what a model converges on. Take the face from the chosen reference, or find a match outside the most popular Google Fonts, and check it against the reference screenshot.
 - Give display, body and small print distinct voices with a reason behind each.
 - Derive the palette from the imagery. Commit to a dominant ground with sharp accents. Some sections may be monochrome.

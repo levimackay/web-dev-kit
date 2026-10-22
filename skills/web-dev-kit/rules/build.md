@@ -13,6 +13,12 @@ A developer opening the source must not be able to tell it apart from a careful 
 - Interactive demos keep one state object and one `render()`. User text is read from the element and never interpolated into `innerHTML`.
 - Prettier style formatting, consistent quotes and semicolons.
 
+## Components
+
+Start from unstyled primitives so the look comes from the spec, not a kit: Base UI (`mui/base-ui`), React Aria (`adobe/react-spectrum`, the best accessibility behaviour), Ark UI (`chakra-ui/ark`, also Vue, Solid and Svelte) or Radix (`radix-ui/primitives`). shadcn is Radix with a default skin, and that default skin is a tell. Restyle every part of it or start from the primitive.
+
+For real production code worth studying: `guardian/dotcom-rendering`, `the-pudding/website`, `darkroomengineering/satus`, `basementstudio/shader-lab`.
+
 ## HTML
 
 - `body` holds the skip link, `header`, `main#main` and `footer` in that order. Header and footer never sit inside `main`.
@@ -33,6 +39,16 @@ A developer opening the source must not be able to tell it apart from a careful 
 - Images: `srcset` and `sizes`, explicit `width` and `height`, `loading="lazy"` and `decoding="async"` below the first screen, `fetchpriority="high"` on the hero image.
 - Fonts: preload the one or two woff2 files the first screen uses, and add fallback `@font-face` rules from a local font with `size-adjust`, `ascent-override` and `descent-override` tuned so the swap barely moves the headline.
 - The largest element on the first screen must be visible without JavaScript. Animate it with transform only, never from `opacity: 0`.
+
+## Second opinions
+
+`check.sh` covers the common defects. For a deeper pass before launch:
+
+- `npx unlighthouse@0.19.1 --site <url>` runs Lighthouse on every page of the site.
+- Lighthouse CI (`GoogleChrome/lighthouse-ci`) holds performance budgets in CI.
+- Playwright `toHaveScreenshot` or BackstopJS for visual regression between fix rounds.
+- The Nu Html Checker (`validator/validator`) for spec validity.
+- Project Wallace (`projectwallace/css-analyzer`) counts unique colours and font sizes, so token sprawl shows up.
 
 ## Shipping hygiene
 
