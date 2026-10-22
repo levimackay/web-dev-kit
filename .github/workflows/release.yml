@@ -1,0 +1,26 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the tag matches the plugin version
+        run: |
+          version=$(node -p 'require("./.claude-plugin/plugin.json").version')
+          [ "v$version" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME, plugin.json says $version"; exit 1; }
+      - name: Zip the skill
+        run: |
+          mkdir -p out
+          (cd skills && zip -rq "../out/web-dev-kit-$GITHUB_REF_NAME.zip" web-dev-kit -x "web-dev-kit/check/node_modules/*" "web-dev-kit/check/test/*")
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" "out/web-dev-kit-$GITHUB_REF_NAME.zip" --title "$GITHUB_REF_NAME" --generate-notes

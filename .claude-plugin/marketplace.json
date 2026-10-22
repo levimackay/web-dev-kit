@@ -1,0 +1,18 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "web-dev-kit",
+  "description": "Levi Mackay's web dev setup for Claude Code",
+  "owner": {
+    "name": "Levi Mackay",
+    "url": "https://github.com/levimackay"
+  },
+  "plugins": [
+    {
+      "name": "web-dev-kit",
+      "description": "Installs a curated web toolkit, the rules that get fixed by hand, and a page check at three widths.",
+      "version": "1.0.0",
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}

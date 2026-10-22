@@ -10,10 +10,10 @@ description: Builds websites and web UI that do not read as AI made. Installs a 
 When the user asks to install or set up the kit:
 
 1. Run `bash install.sh --dry-run` from this skill's folder and show the user the list.
-2. Once they say yes, run `bash install.sh --yes`. Add `--extras` for video tools (Remotion, HyperFrames, brag), GetLayers and 67 visual style skills.
+2. Once they say yes, run `bash install.sh --yes`. Add `--extras` for 3D, React motion, scroll-craft, diagrams, video tools, GetLayers and 67 visual style skills.
 3. Tell them to restart Claude Code, then do two things by hand: add the Anthropic `design` plugin from claude.ai (Customize, then Plugins), and connect GetLayers through `/mcp` if they took the extras.
 
-It needs `claude`, `npx` (Node 20 or newer) and `git`. Skills are pinned to reviewed commits. `scripts/pin.sh` moves the pins forward when the kit is updated.
+It needs `claude`, `npx` (Node 20 or newer) and `git`. Skills are pinned to fixed commits. `scripts/pin.sh` moves the pins forward when the kit is updated.
 
 ## Building a site or web UI
 
@@ -23,7 +23,9 @@ Then read the rule file for the work in front of you:
 
 | Working on | Read |
 | --- | --- |
-| Visual direction, type, colour, layout | `rules/look.md` |
+| Visual direction, colour, layout | `rules/look.md` |
+| Fonts: choosing, licensing, self hosting | `rules/type.md` |
+| Photos, textures, any image | `rules/imagery.md` |
 | Any words on the page | `rules/copy.md` |
 | HTML, CSS, JS, accessibility, performance, git hygiene | `rules/build.md` |
 | Scroll effects, smooth scrolling, pins, WebGL | `rules/motion.md` |
@@ -43,18 +45,32 @@ It renders at 1440, 768 and 390, scrolls the whole page, and reports console err
 
 Then send the screenshots to a fresh critic as `rules/workflow.md` step 10 describes.
 
+To see which fonts a reference site really renders and what licence each file carries:
+
+```bash
+bash fonts.sh https://example.com
+```
+
 ## Which installed tool for which job
 
 | Job | Use |
 | --- | --- |
-| Picking a visual direction | `frontend-design`, `design-taste-frontend`, `ui-ux-pro-max` |
+| Picking a visual direction | `frontend-design`, `design-taste-frontend`, `hallmark`, `ui-ux-pro-max` |
+| A fast pass to lift generic UI | `baseline-ui`, `better-ui` |
+| Type, colour and layout craft with exact values | `better-typography`, `better-colors`, `better-layout`, `color-expert` |
+| Reviewing an interface diff | `interface-review` |
+| Current web platform features before writing HTML, CSS or JS | `modern-web-guidance` |
+| Copy that reads as AI written | `humanizer`, `better-writing` |
 | Critique, polish or redesign existing UI | `impeccable` plugin (impeccable:impeccable), `web-design-guidelines` |
 | Animation and scroll effects | `gsap-skills` (gsap-core, gsap-scrolltrigger, gsap-react and more) |
-| Reviewing or speeding up motion | `review-animations`, `animation-performance` |
+| Reviewing or speeding up motion | `review-animations`, `animation-performance`, `fixing-motion-performance` |
+| Page transitions in React | `vercel-react-view-transitions` |
 | Breaking UI with worst case data | `break-ui` |
 | Making a web app feel native on a phone | `mobile-native` |
 | React component structure | `vercel-composition-patterns` |
 | Lighthouse style audit | `web-quality-skills` (start with web-quality-audit) |
+| Accessibility fixes | `fixing-accessibility`, `better-accessibility` |
+| Titles, descriptions, social cards | `fixing-metadata` |
 | Slow pages in Chrome (LCP, CLS, INP) | `webperf` skills with the `chrome-devtools-mcp` plugin |
 | Technical SEO, structured data, local SEO | `seo-technical`, `seo-schema`, `seo-local` |
 | Landing page copy and conversion | `copywriting`, `cro` |
@@ -65,6 +81,10 @@ Then send the screenshots to a fresh critic as `rules/workflow.md` step 10 descr
 | Review before committing | `code-review`, `pr-review-toolkit`, `code-simplifier` |
 | Security pass on auth, secrets or user input | `claude-security` |
 | Launch video or motion graphics (extras) | `brag`, Remotion skills, HyperFrames skills |
+| 3D and WebGL (extras) | the `threejs-*` skills |
+| React springs and gestures with Motion (extras) | `motion-foundations`, `motion-patterns`, `motion-advanced` |
+| A scroll driven brand landing page (extras) | `scroll-craft` |
+| Diagrams styled with the site's tokens (extras) | `diagram-design` |
 | A named visual style such as bento or brutalism (extras) | the style skill of that name |
 
 For real brand design tokens (Stripe, Linear, Apple and about 70 more), clone https://github.com/VoltAgent/awesome-design-md and point Claude at the DESIGN.md for the brand to match.

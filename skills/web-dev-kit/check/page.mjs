@@ -207,6 +207,23 @@ const bannedFonts = new Set(
   ].map((f) => f.toLowerCase()),
 );
 
+const popularCutoff = 150;
+
+async function googlePopularity() {
+  try {
+    const response = await fetch("https://fonts.google.com/metadata/fonts", { signal: AbortSignal.timeout(5000) });
+    const { familyMetadataList } = await response.json();
+    return new Map(
+      familyMetadataList
+        .toSorted((a, b) => a.popularity - b.popularity)
+        .slice(0, popularCutoff)
+        .map((f, i) => [f.family.toLowerCase(), i + 1]),
+    );
+  } catch {
+    return new Map();
+  }
+}
+
 const copyRules = [
   { rule: "dashes", level: "fail", pattern: /.{0,30}[–—].{0,30}/, why: "em or en dash" },
   { rule: "punctuation", level: "warn", pattern: /.{0,30}[a-z];\s+[a-z].{0,30}/i, why: "semicolon in prose" },
@@ -265,7 +282,7 @@ export async function checkPage(url, { external = false } = {}) {
         add("warn", "overflow", `wider than the screen but hidden by overflow on html or body: ${found.outermost.join(", ")}`, w);
       }
       if (found.small.length) {
-        add("warn", "small-text", `${found.small.length} paragraphs under 16px, e.g. ${found.small[0]}`, w);
+        add("warn", "small-text", `${found.small.length} ${found.small.length === 1 ? "paragraph" : "paragraphs"} under 16px, e.g. ${found.small[0]}`, w);
       }
       for (const img of found.images) {
         const name = new URL(img.src, url).pathname;
@@ -287,8 +304,15 @@ export async function checkPage(url, { external = false } = {}) {
           const hit = joined.match(pattern);
           if (hit) add(level, rule, `${why}: "${hit[0].trim()}"`);
         }
-        const banned = found.fonts.filter((f) => bannedFonts.has(f.toLowerCase()));
-        if (banned.length) add("warn", "fonts", `${banned.join(", ")} reads as a default pick. Take type from the reference instead.`);
+        const popular = await googlePopularity();
+        for (const family of found.fonts) {
+          const rank = popular.get(family.toLowerCase());
+          if (bannedFonts.has(family.toLowerCase())) {
+            add("warn", "fonts", `${family} reads as a default pick. Take type from the reference instead.`);
+          } else if (rank) {
+            add("warn", "fonts", `${family} is the #${rank} most used family on Google Fonts. Check it is the reference's choice, not a default.`);
+          }
+        }
         for (const id of new Set(found.missingAnchors)) add("fail", "anchors", `#${id} links to nothing`);
         if (found.h1 !== 1) add("warn", "meta", `${found.h1} h1 elements, expected one`);
         if (!found.title) add("warn", "meta", "no title");

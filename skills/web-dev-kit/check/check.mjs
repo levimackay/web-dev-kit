@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import { checkSource } from "./source.mjs";
 import { checkPage } from "./page.mjs";
 import { serve } from "./serve.mjs";
+import { clean, untrusted } from "./clean.mjs";
 
 const usage = `Usage: check.sh <url or folder> [--src <folder>] [--external] [--json]
 
@@ -41,10 +42,10 @@ export async function run({ target, src, external = false }) {
 function print(target, findings) {
   const order = { fail: 0, warn: 1 };
   findings.sort((a, b) => order[a.level] - order[b.level] || a.rule.localeCompare(b.rule));
-  console.log(`check ${target}\n`);
+  console.log(`check ${clean(target, 300)}\n${untrusted}\n`);
   for (const f of findings) {
     const where = (f.width ?? "").padEnd(9);
-    console.log(`${f.level.toUpperCase().padEnd(5)} ${f.rule.padEnd(15)} ${where} ${f.message}`);
+    console.log(`${f.level.toUpperCase().padEnd(5)} ${f.rule.padEnd(15)} ${where} ${clean(f.message, 240)}`);
   }
   const fails = findings.filter((f) => f.level === "fail").length;
   console.log(`\n${fails} to fix, ${findings.length - fails} to look at`);
