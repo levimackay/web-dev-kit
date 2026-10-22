@@ -8,5 +8,6 @@
   },
   "homepage": "https://github.com/levimackay/web-dev-kit",
   "repository": "https://github.com/levimackay/web-dev-kit",
+  "license": "MIT",
   "keywords": ["web", "design", "landing-page", "gsap", "accessibility", "playwright"]
 }

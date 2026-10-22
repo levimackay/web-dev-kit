@@ -2,6 +2,7 @@
   "name": "web-dev-kit-check",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "engines": {
     "node": ">=20"
   },
