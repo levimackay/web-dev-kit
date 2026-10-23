@@ -194,3 +194,7 @@ bash skills/web-dev-kit/scripts/pin.sh
 ```
 
 Moves every commit pin to the current head of its repo, so the changes can be reviewed in one diff.
+
+## Licence
+
+The kit itself (its rules, scripts and check) is [MIT](LICENSE). Every tool it installs keeps its own licence.
